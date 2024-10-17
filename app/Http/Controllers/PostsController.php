@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BukuModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PostsController extends Controller
 {
