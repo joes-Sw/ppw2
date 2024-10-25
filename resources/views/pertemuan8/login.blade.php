@@ -6,6 +6,11 @@
     {{ $message }}
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close" style="position: absolute; right: 10px; top: 10px;"></button>
 </div>
+@elseif($message = Session::get('error'))
+    <div class="alert alert-error alert-dismissible fade show" role="alert">
+        {{ $message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
 @endif
 <div class="row justify-content-center mt-5">
     <div class="col-md-8">

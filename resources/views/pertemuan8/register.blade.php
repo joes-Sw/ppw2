@@ -29,6 +29,28 @@
                     </div>
 
                     <div class="mb-3 row">
+                        <label for="age" class="col-md-4 col-form-label text-md-end text-start">age</label>
+                        <div class="col-md-6">
+                            <input type="number" class="form-control @error('age') is-invalid @enderror" id="age" name="age" value="{{ old('age') }}">
+                            @if ($errors->has('age'))
+                                <span class="text-danger">{{ $errors->first('age') }}</span>
+                            @endif
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3 row">
+                        <label for="level" class="col-md-4 col-form-label text-md-end text-start">Pilih Level User:</label>
+                        <div class="col-md-6">
+                        <select id="level" name="level" class="form-select" >
+                            <option disabled selected>--Pilih Level --</option>
+                            @foreach($leveluser as $level)
+                            <option value="{{ $level->level }}" {{ old('level') == $level->level ? 'selected' : null}}>{{ $level->level }}</option>
+                            @endforeach
+                        </select>
+                        </div>
+                    </div>
+
+                    <div class="mb-3 row">
                         <label for="password" class="col-md-4 col-form-label text-md-end text-start">Password</label>
                         <div class="col-md-6">
                             <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password">

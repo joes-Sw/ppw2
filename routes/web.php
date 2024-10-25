@@ -8,7 +8,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('welcome');
+
+Route::get('restricted', function () {
+    return "Anda berusia lebih dari 18 tahun !";
+})->middleware('checkage');
 
 Route::get('/about', function () {
     return view('about', [
@@ -17,10 +21,16 @@ Route::get('/about', function () {
     ]);
 });
 
-
+Route::middleware(['auth', 'superadmin'])->group(function () {
 Route::get('/posts', [PostsController::class, 'index']);
+});
 
-Route::get('/buku', [BukuController::class, 'index'])->name('buku')->middleware('auth');
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/buku', [BukuController::class, 'index'])->name('buku');
+
+});
+
+
 Route::get('/buku/tambah', [BukuController::class, 'create'])->name('buku.tambah');
 Route::post('/buku/simpan', [BukuController::class, 'store'])->name('buku.store');
 Route::get('/buku/ubah/{id}', [BukuController::class, 'edit'])->name('buku.edit');
@@ -32,6 +42,7 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('/store', 'store')->name('store')->middleware('guest');
     Route::get('/login', 'login')->name('login')->middleware('guest');
     Route::post('/authenticate', 'authenticate')->name('authenticate');
-    Route::get('/logout', 'logout')->middleware('auth');
-    Route::post('/logout', 'logout')->name('logout')->middleware('auth');
+    Route::get('/logout', 'logout')->name('logout');
+    Route::post('/logout',  'logout')->name('logout');
 });
+

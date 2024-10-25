@@ -18,7 +18,8 @@ class AuthController extends Controller
 
     public function register()
     {
-        return view('pertemuan8.register');
+        $leveluser = User::all();
+        return view('pertemuan8.register', compact('leveluser'));
     }
 
     public function store(Request $request)
@@ -26,13 +27,17 @@ class AuthController extends Controller
         $request->validate([
             'name' => 'required|string|max:150',
             'email' => 'required|email|max:150|unique:users',
+            'age' => 'required',
+            'level' => 'required',
             'password' => 'required|min:8|confirmed'
         ]);
 
         User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password)
+            'age' => $request->input('age'),
+            'level' => $request->input('level'),
+            'password' => Hash::make($request->password),
         ]);
 
         $credentials = $request->only('email', 'password');

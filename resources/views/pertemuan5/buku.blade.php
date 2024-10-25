@@ -2,11 +2,16 @@
 
 @section('content')
     
-
+    <p>(hanya admin yang dapat melihat)</p>
     <a href="{{ route('buku.tambah') }}" class="btn btn-success">Tambah Buku</a>
 
     @if ($message = Session::get('success'))
     <div class="alert alert-success alert-dismissible fade show" role="alert">
+        {{ $message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    @elseif($message = Session::get('error'))
+    <div class="alert alert-error alert-dismissible fade show" role="alert">
         {{ $message }}
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
