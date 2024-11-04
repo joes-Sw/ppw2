@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BukuController;
 use App\Http\Controllers\PostsController;
+use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -29,6 +30,11 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/buku', [BukuController::class, 'index'])->name('buku');
 
 });
+
+Route::get('/index', [UsersController::class, 'index'])->name('user.index');
+Route::get('/index/edit/{id}', [UsersController::class, 'edit'])->name('user.edit');
+Route::post('/index/update/{id}', [UsersController::class, 'update'])->name('user.update');
+Route::get('/index/{id}', [UsersController::class, 'destroy'])->name('user.destroy');
 
 
 Route::get('/buku/tambah', [BukuController::class, 'create'])->name('buku.tambah');

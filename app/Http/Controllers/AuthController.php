@@ -29,8 +29,17 @@ class AuthController extends Controller
             'email' => 'required|email|max:150|unique:users',
             'age' => 'required',
             'level' => 'required',
-            'password' => 'required|min:8|confirmed'
+            'password' => 'required|min:2|confirmed',
+            'photo' => 'mimes:jpeg,jpg,png|max:3096'
         ]);
+
+        if($request->hasFile('photo')) {
+            $filenamewithext = $request->file('photo')->getClientOriginalName();
+            $filename = pathinfo($filenamewithext, PATHINFO_FILENAME);
+            $extension = $request->file('photo')->getClientOriginalExtension();
+            $filenamesimpan = $filename . '_' . time() . '_' . $extension;
+            $path = $request->file('photo')->storeAs('photos', $filenamesimpan);
+        }
 
         User::create([
             'name' => $request->name,
@@ -38,7 +47,9 @@ class AuthController extends Controller
             'age' => $request->input('age'),
             'level' => $request->input('level'),
             'password' => Hash::make($request->password),
+            'photo' => $path
         ]);
+
 
         $credentials = $request->only('email', 'password');
         Auth::attempt($credentials);
