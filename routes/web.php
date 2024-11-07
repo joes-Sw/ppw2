@@ -22,9 +22,14 @@ Route::get('/about', function () {
     ]);
 });
 
-Route::middleware(['auth', 'superadmin'])->group(function () {
-Route::get('/posts', [PostsController::class, 'index']);
-});
+// Route::middleware(['auth', 'superadmin'])->group(function () {
+// });
+Route::get('/gallery', [PostsController::class, 'index'])->name('gallery.index');
+Route::get('/tambah', [PostsController::class, 'create'])->name('gallery.create');
+Route::post('/tambah/simpan', [PostsController::class, 'store'])->name('gallery.store');
+Route::get('/gallery/edit/{id}', [PostsController::class, 'edit'])->name('gallery.edit');
+Route::post('/gallery/edit/{id}', [PostsController::class, 'update'])->name('gallery.update');
+Route::delete('/gallery/{id}', [PostsController::class, 'destroy'])->name('gallery.destroy');
 
 Route::middleware(['auth', 'admin'])->group(function () {
     Route::get('/buku', [BukuController::class, 'index'])->name('buku');

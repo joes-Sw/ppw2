@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\BukuModel;
+use App\Models\PostModel;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class PostsController extends Controller
 {
@@ -13,8 +15,13 @@ class PostsController extends Controller
      */
     public function index()
     {
-        $data = ['data','data2'];
-        return view('pertemuan4.posts', compact('data'));
+        // $data = array(
+        //     'id' => 'posts',
+        //     'menu' => 'Gallery',
+        //     'galleries' => PostModel::where('picture', '!=', '')->whereNotNull('picture')->orderBy('created_at', 'desc')->paginate(5)
+        // );
+        $data2 = DB::table('posts')->whereNotNull('picture')->paginate(5);
+        return view('pertemuan4.posts', compact('data2'));
     }
 
     /**
@@ -22,7 +29,7 @@ class PostsController extends Controller
      */
     public function create()
     {
-        //
+        return view('pertemuan11.creategallery');
     }
 
     /**
@@ -30,15 +37,43 @@ class PostsController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $this->validate($request, [
+            'title' => 'required|max:255',
+            'description' => 'required',
+            'picture' => 'image|nullable|max:1999'
+        ]);
+    
+        if ($request->hasFile('picture')) {
+            $filenameWithExt = $request->file('picture')->getClientOriginalName();
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            $extension = $request->file('picture')->getClientOriginalExtension();
+            $basename = uniqid() . time();
+            $smallFilename = "small_{$basename}.{$extension}";
+            $mediumFilename = "medium_{$basename}.{$extension}";
+            $largeFilename = "large_{$basename}.{$extension}";
+            $filenameSimpan = "{$basename}.{$extension}";
+            $path = $request->file('picture')->storeAs('posts_image', $filenameSimpan);
+        } else {
+            $filenameSimpan = 'noimage.png';
+        }
+    
+        // dd($request->input());
+        $post = new PostModel;
+        $post->picture = $path;
+        $post->title = $request->input('title');
+        $post->description = $request->input('description');
+        $post->save();
+    
+        return redirect()->route('gallery.index')->with('success', 'Berhasil menambahkan data baru');
     }
+    
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    private function getpost($id)
     {
-        //
+        return collect(PostModel::where('id', $id)->get())->firstOrFail();
     }
 
     /**
@@ -46,7 +81,8 @@ class PostsController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $edit = $this->getpost($id);
+        return view('pertemuan11.editgallery', compact('edit'));
     }
 
     /**
@@ -54,7 +90,45 @@ class PostsController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'title' => 'string|max:150',
+            'photo' => 'mimes:jpeg,jpg,png|max:3096'
+        ]);
+
+        if ($request->file('picture')) {
+            if ($request->oldImage) {
+                Storage::delete($request->oldImage);
+            }
+
+            $filenameWithExt = $request->file('picture')->getClientOriginalName();
+            $filename = pathinfo($filenameWithExt, PATHINFO_FILENAME);
+            $extension = $request->file('picture')->getClientOriginalExtension();
+            $basename = uniqid() . time();
+            $smallFilename = "small_{$basename}.{$extension}";
+            $mediumFilename = "medium_{$basename}.{$extension}";
+            $largeFilename = "large_{$basename}.{$extension}";
+            $filenameSimpan = "{$basename}.{$extension}";
+            $path = $request->file('picture')->storeAs('posts_image', $filenameSimpan);
+            
+            $data = [
+                'id' => $request->id,
+                'title' => $request->input('title'),
+                'description' => $request->input('description'),
+                'picture' => $path,
+            ];
+
+        } else {
+            $data = [
+                'id' => $request->id,
+                'title' => $request->input('title'),
+                'description' => $request->input('description'),
+            ];
+        }
+        $update_posts = PostModel::where('id', '=', $id)->update($data);
+
+        if ($update_posts) {
+            return redirect()->route('gallery.index')->with('success', 'berhasil mengubah data');
+        }
     }
 
     /**
@@ -62,6 +136,9 @@ class PostsController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $foto = PostModel::where('id', $id)->first()->picture;
+        Storage::delete($foto);
+        $delete_post = PostModel::where('id', $id)->delete();
+        return back()->with('success', 'Berhasil Menghapus Data');
     }
 }

@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('posts', function (Blueprint $table) {
             $table->id();
             $table->string('title',150);
-            $table->text('content');
-            $table->integer('jml_komen');
+            $table->mediumText('description')->nullable();
+            $table->string('picture')->nullable();
             $table->enum('status', ['draft','published','archived'])->default('draft');
             $table->timestamps();
         });
