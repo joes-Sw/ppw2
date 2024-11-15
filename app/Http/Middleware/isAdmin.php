@@ -26,7 +26,7 @@ class isAdmin
         // $request->session()->regenerateToken();
         // return redirect()->route('login')->with('error', 'Anda bukan admin!');
         if(auth()->user() && auth()->user()->level !== 'admin'){
-            return redirect('/posts')->with('error','Anda Tidak memiliki akses ke halaman admin');
+            return redirect('/gallery')->with('error','Anda Tidak memiliki akses ke halaman admin');
         }
         return $next($request);
     }

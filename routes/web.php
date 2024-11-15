@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\BukuController;
 use App\Http\Controllers\PostsController;
+use App\Http\Controllers\SendEmailController;
 use App\Http\Controllers\UsersController;
 use Illuminate\Support\Facades\Route;
 
@@ -56,4 +57,9 @@ Route::controller(AuthController::class)->group(function () {
     Route::get('/logout', 'logout')->name('logout');
     Route::post('/logout',  'logout')->name('logout');
 });
+
+Route::get('/send-email', [SendEmailController::class, 'index'])->name('kirim-email');
+Route::post('/post-email', [SendEmailController::class,'store'])->name('post-email');
+
+Route::get('/registerwithemail', [SendEmailController::class, 'index1'])->name('regiswithmail');
 
