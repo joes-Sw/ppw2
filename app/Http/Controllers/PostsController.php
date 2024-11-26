@@ -163,8 +163,8 @@ class PostsController extends Controller
      *                         type="object",
      *                         properties={
      *                             @OA\Property(property="id", type="integer", example=1),
-     *                             @OA\Property(property="title", type="string", example="The Great Gatsby"),
-     *                             @OA\Property(property="writer", type="string", example="F. Scott Fitzgerald"),
+     *                             @OA\Property(property="title", type="string", example=" midnight library"),
+     *                             @OA\Property(property="description", type="string", example="this is library"),
      *                             @OA\Property(property="picture", type="string", example="image_url.jpg")
      *                         }
      *                     )

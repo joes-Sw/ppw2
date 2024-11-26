@@ -47,11 +47,11 @@
                                                     },
                                                     "title": {
                                                         "type": "string",
-                                                        "example": "The Great Gatsby"
+                                                        "example": " midnight library"
                                                     },
-                                                    "writer": {
+                                                    "description": {
                                                         "type": "string",
-                                                        "example": "F. Scott Fitzgerald"
+                                                        "example": "this is library"
                                                     },
                                                     "picture": {
                                                         "type": "string",
