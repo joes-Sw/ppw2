@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\Api\BookApiController;
+use App\Http\Controllers\greetController;
+use App\Http\Controllers\PostsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,3 +20,11 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::get("/books", [BookApiController::class, "index"]);
+Route::post("/books", [BookApiController::class, "store"]);
+Route::put("/books/{id}", [BookApiController::class, "update"]);
+Route::get("/books/{id}", [BookApiController::class, "show"]);
+Route::delete("/books/{id}", [BookApiController::class, "destroy"]);
+
+Route::get("/greet", [greetController::class, 'index'])->name('greet');
+Route::get("/gallery", [PostsController::class, 'bookAPI'])->name('books.api');

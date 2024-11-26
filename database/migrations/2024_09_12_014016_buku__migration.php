@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('judul',150);
             $table->text('penulis');
-            $table->integer('harga');
+            $table->integer('harga')->nullable();
             $table->date('tgl_terbit');
             $table->timestamps();
         });

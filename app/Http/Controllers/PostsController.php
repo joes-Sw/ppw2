@@ -141,4 +141,57 @@ class PostsController extends Controller
         $delete_post = PostModel::where('id', $id)->delete();
         return back()->with('success', 'Berhasil Menghapus Data');
     }
+
+    /**
+     * @OA\Get(
+     *     path="/api/gallery",
+     *     tags={"Gallery"},
+     *     summary="Get list of books pictured",
+     *     description="Mengambil daftar buku yang ada gambar",   
+     * @OA\Response(
+     *         response=200,
+     *         description="Sukses mendapatkan data buku",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             properties={
+     *                 @OA\Property(property="status", type="boolean", example=true),
+     *                 @OA\Property(property="message", type="string", example="Berhasil mendapatkan semua buku"),
+     *                 @OA\Property(
+     *                     property="data",
+     *                     type="array",
+     *                     @OA\Items(
+     *                         type="object",
+     *                         properties={
+     *                             @OA\Property(property="id", type="integer", example=1),
+     *                             @OA\Property(property="title", type="string", example="The Great Gatsby"),
+     *                             @OA\Property(property="writer", type="string", example="F. Scott Fitzgerald"),
+     *                             @OA\Property(property="picture", type="string", example="image_url.jpg")
+     *                         }
+     *                     )
+     *                 ),
+     *             }
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal server error",
+     *         @OA\JsonContent(
+     *             type="object",
+     *             @OA\Property(property="message", type="string", example="Internal server error")
+     *         )
+     *     )
+     * )
+     */
+    public function bookAPI()
+    {
+        $data_buku = PostModel::where('picture', '!=', '')->whereNotNull('picture')->orderBy('created_at', 'desc')->get();
+
+        // Mereturn respons dalam format JSON
+        return response()->json([
+            'status' => true,
+            'message' => "Berhasil mendapatkan semua buku",
+            'data' => $data_buku,
+        ], 200);
+    }
+
 }
