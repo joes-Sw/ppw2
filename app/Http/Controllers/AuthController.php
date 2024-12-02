@@ -30,7 +30,7 @@ class AuthController extends Controller
             'age' => 'required',
             'level' => 'required',
             'password' => 'required|min:2|confirmed',
-            'photo' => 'mimes:jpeg,jpg,png|max:3096'
+            'photo' => 'required|mimes:jpeg,jpg,png|max:3096'
         ]);
 
         if($request->hasFile('photo')) {
